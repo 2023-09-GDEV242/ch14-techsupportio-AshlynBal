@@ -119,7 +119,22 @@ public class Responder {
         Path path = Paths.get(FILE_OF_DEFAULT_RESPONSES);
         try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
             String response = reader.readLine();
+
             while (response != null) {
+                // If the line is empty, skip it and go to the next line.
+                if (response.isEmpty()) {
+                    response = reader.readLine();
+                    continue;
+                }
+                boolean loop = true;
+                while (loop) {
+                    String nextLine = reader.readLine();
+                    if (nextLine != null && !nextLine.isEmpty()) {
+                        response += "\n" + nextLine;
+                    } else {
+                        loop = false;
+                    }
+                }
                 defaultResponses.add(response);
                 response = reader.readLine();
             }
